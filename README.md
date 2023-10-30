@@ -175,18 +175,17 @@ class TrainsTableSeeder extends Seeder
     public function run(Faker $faker): void
     {
         //USES A FOR LOOP TO ADD 10 ENTRIES ON THE TABLE
-        for ($i = 0; $i < 10; $i++) {
             $train = new Train();
             $train->company = $faker->company();
             $train->departure_station = $faker->city();
             $train->departure_time = $faker->dateTimeThisMonth('+10 days');
             $train->arrival_station = $faker->city();
-            $train->arrival_time = $faker->dateTimeBetween($train->departure_time, $train->departure_time . '+2 days');
+            $train->arrival_time = $train->departure_time->modify('+2 days')->format('Y-m-d H:i:s');
             $train->train_code = $faker->numberBetween(0, 200);
             $train->carriages = $faker->randomDigitNotNull();
             $train->delay = $faker->boolean();
             $train->canceled = $faker->boolean();
-            
+
             //SAVE THE DATA
             $train->save();
         }
@@ -203,7 +202,7 @@ php artisan db:seed --class=TrainsTableSeder
 
 ```
 
-UPDATE THE TABLE
+IS IT IS NEEDED  TO UPDATE THE TABLE:
 
 ```
 
@@ -211,7 +210,7 @@ php artisan make:migration update_trains_table_ --table=trains
 
 ```
 
-EDIT THE TABLE IN THE UP ABND DOWN FUNCTIONS IN THE update_trains_table.php MIGRATION FILE
+EDIT THE TABLE IN THE UP ABND DOWN FUNCTIONS IN THE update_trains_table.php MIGRATION FILE (REMOVES THE STRING LIMIT 50 FROM THE company COLUMN)
 
 ```php
 
@@ -223,7 +222,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('trains', function (Blueprint $table) {
-            $table->string('company')->nullable();
+            // $table->string('company')->nullable()->change();
         });
     }
 
@@ -233,9 +232,70 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('trains', function (Blueprint $table) {
-            $table->dropColumn('company');
+            // $table->string('company', 50)-change();
         });
     }
 };
+
+```
+
+ADD A PAGE CONTROLLER
+
+```
+
+php artisan make:controller Guests/PageController
+
+```
+
+DEFINE THE ROUTE IN App\Http\Controllers\Guests\PageController.php
+
+```php
+
+    public function home()
+    {
+        // RETURNS THE VIEW 'index' (index.blade.php)
+        return view('home');
+    }
+
+```
+
+EDIT THE 'index' METHOD AND GIVE THE MODEL Train AS A COLLECTION ARRAY
+
+ADD
+
+```php
+
+use App\Models\Train;
+
+```
+
+EDIT
+
+
+```php
+
+public function home()
+{
+    return view('home', ['trains' => Train::all()]);
+}
+
+```
+
+UPDATE THE ROUTE IN web.php
+
+ADD
+
+```php
+
+use App\Http\Controllers\Guests\PageController;
+
+
+```
+
+GETS THE ROUTE FROM THE Controller PageController CLASS AND USES THE 'home' METHOD. GIVES THE ROUTE THE "home" NAME:
+
+```php
+
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 ```

@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 
 use App\Models\Train;
+use Carbon\Carbon;
 
 class TrainsTableSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class TrainsTableSeeder extends Seeder
             $train->departure_station = $faker->city();
             $train->departure_time = $faker->dateTimeThisMonth('+10 days');
             $train->arrival_station = $faker->city();
-            $train->arrival_time = $faker->dateTimeBetween($train->departure_time, $train->departure_time . '+2 days');
+            $train->arrival_time = $train->departure_time->modify('+2 days')->format('Y-m-d H:i:s');
             $train->train_code = $faker->numberBetween(0, 200);
             $train->carriages = $faker->randomDigitNotNull();
             $train->delay = $faker->boolean();
