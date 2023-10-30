@@ -175,6 +175,7 @@ class TrainsTableSeeder extends Seeder
     public function run(Faker $faker): void
     {
         //USES A FOR LOOP TO ADD 10 ENTRIES ON THE TABLE
+        for ($i = 0; $i < 10; $i++) {
             $train = new Train();
             $train->company = $faker->company();
             $train->departure_station = $faker->city();
