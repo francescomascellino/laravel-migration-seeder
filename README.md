@@ -2,13 +2,25 @@
 
 # Migration/Seeder
 
+CREATES A NEW MIGRATION FOR A NEW TABLE CALLED 'trains' ON THE DATABASE
+
+```
+
 php artisan make:migration create_trains_table
 
-CREATES A NEW MIGRATION FOR A NEW TABLE CALLED 'trains' ON THE DATABASE
+```
+
+RESULT:
+
+```
 
  Migration [C:\MAMP\htdocs\Laravel\laravel-migration-seeder\database\migrations/2023_10_30_130439_create_trains_table.php] created successfully.
 
+```
+
  ADD THE TABLE COLUMS IN THE up() FUNCTION Schema FACADE:
+
+```php
 
      public function up(): void
     {
@@ -38,11 +50,19 @@ CREATES A NEW MIGRATION FOR A NEW TABLE CALLED 'trains' ON THE DATABASE
         Schema::dropIfExists('trains');
     }
 
+```
+
 EXECUTE THE MIGRATION
+
+```
 
 php artisan migrate
 
+```
+
 CHECK THE DATABASES
+
+```
 
 SHOW DATABASES;
 
@@ -60,7 +80,11 @@ SHOW DATABASES;
 +--------------------------+
 8 rows in set (0.00 sec)
 
+```
+
 ENTER THE DATABASE
+
+```
 
 USE laravel_migration_seeder; 
 
@@ -77,7 +101,11 @@ SHOW TABLES;
 +------------------------------------+
 6 rows in set (0.00 sec)
 
+```
+
 CHECK THE TABLE
+
+```
 
 DESCRIBE trains;
 +-------------------+---------------------+------+-----+---------+----------------+
@@ -98,23 +126,45 @@ DESCRIBE trains;
 +-------------------+---------------------+------+-----+---------+----------------+
 12 rows in set (0.00 sec)
 
+```
+
 CREATE THE MODEL CLASS "Train"
+
+```
 
 php artisan make:model Train
 
+```
+
 CREATE THE SEEDER FOR THE "trains" TABLE IN THE DATABASE
+
+```
 
 php artisan make:seeder TrainsTableSeeder
 
+```
+
+RESULT:
+
+```
+
 Seeder [C:\MAMP\htdocs\Laravel\laravel-migration-seeder\database/seeders/TrainsTableSeeder.php] created successfully.
 
+```
+
 ADD THE MODEL Train AND THE Faker api INTO THE SEEDER
+
+```php
 
 use Faker\Generator as Faker;
 
 use App\Models\Train;
 
+```
+
 ADD Faker AS A VARIABLE CALLED FAKER TO THE SEEDER RUN FUNCTION AND POPULATE THE SEED
+
+```php
 
 class TrainsTableSeeder extends Seeder
 {
@@ -143,12 +193,27 @@ class TrainsTableSeeder extends Seeder
     }
 }
 
+```
+
 PLANT THE SEED
+
+```
+
 php artisan db:seed --class=TrainsTableSeder
+
+```
 
 UPDATE THE TABLE
 
+```
+
 php artisan make:migration update_trains_table_ --table=trains
+
+```
+
+EDIT THE TABLE IN THE UP ABND DOWN FUNCTIONS IN THE update_trains_table.php MIGRATION FILE
+
+```php
 
 return new class extends Migration
 {
@@ -172,3 +237,5 @@ return new class extends Migration
         });
     }
 };
+
+```
