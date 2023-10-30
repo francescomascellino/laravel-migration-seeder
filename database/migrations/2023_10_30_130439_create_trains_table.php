@@ -26,6 +26,7 @@ return new class extends Migration
             */
 
             $table->id();
+
             $table->string('company', 20)->nullable();
             $table->string('departure_station');
             $table->dateTime('departure_time');
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->tinyInteger('carriages')->nullable()->unsigned();
             $table->boolean('delay')->default(0);
             $table->boolean('canceled')->default(0);
+
             $table->timestamps();
         });
     }
