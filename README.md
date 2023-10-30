@@ -207,7 +207,7 @@ php artisan db:seed --class=TrainsTableSeder
 
 ```
 
-php artisan make:migration update_trains_table_ --table=trains
+php artisan make:migration update_trains_table --table=trains
 
 ```
 
