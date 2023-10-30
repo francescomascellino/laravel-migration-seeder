@@ -12,7 +12,7 @@ class PageController extends Controller
     public function home()
     {
         $trains = Train::all();
-        $sorted_trains = $trains->sortBy('departure_station')->values()->all();
+        $sorted_trains = $trains->sortBy('departure_time')->values()->all();
 
         // RETURNS THE VIEW 'home' (home.blade.php)
         // return view('home', ['trains' => Train::all()]);
