@@ -358,3 +358,28 @@ USE (https://laravel-news.com/migrate-fresh)
 php artisan migrate:fresh --seed
 
 ```
+
+## EXAMPLE PAGINATION:
+
+ON THE PageController:
+
+```php
+
+    public function houses()
+    {0ùà
+        $houses = House::orderByDesc('id')->paginate(12);
+        //dd($houses);
+
+        return view('houses', compact('houses'));
+    }
+
+```
+ON THE VIEW MARKUP (houses.blade.php IN THIS EXAMPLE):
+
+```php
+
+    <div class="my-3">
+        {{$houses->links('pagination::bootstrap-5')}}
+    </div>
+
+```
