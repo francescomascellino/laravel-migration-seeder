@@ -127,3 +127,33 @@ class TrainsTableSeeder extends Seeder
         //
     }
 }
+
+PLANT THE SEED
+php artisan db:seed --class=TrainsTableSeder
+
+UPDATE THE TABLE
+
+php artisan make:migration update_trains_table_ --table=trains
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('trains', function (Blueprint $table) {
+            $table->string('company')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('trains', function (Blueprint $table) {
+            $table->dropColumn('company');
+        });
+    }
+};
