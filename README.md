@@ -2,7 +2,7 @@
 
 # Migration/Seeder
 
-CREATES A NEW MIGRATION FOR A NEW TABLE CALLED 'trains' ON THE DATABASE
+## REATE A NEW MIGRATION FOR A NEW TABLE CALLED 'trains' ON THE DATABASE
 
 ```
 
@@ -14,11 +14,11 @@ RESULT:
 
 ```
 
- Migration [C:\MAMP\htdocs\Laravel\laravel-migration-seeder\database\migrations/2023_10_30_130439_create_trains_table.php] created successfully.
+Migration [C:\MAMP\htdocs\Laravel\laravel-migration-seeder\database\migrations/2023_10_30_130439_create_trains_table.php] created successfully.
 
 ```
 
- ADD THE TABLE COLUMS IN THE up() FUNCTION Schema FACADE:
+## ADD THE TABLE COLUMS IN THE up() FUNCTION Schema FACADE:
 
 ```php
 
@@ -26,7 +26,7 @@ RESULT:
     {
         Schema::create('trains', function (Blueprint $table) {
 
-            $table->id();
+            $table->id(); //ALREADY PRESET BY LARAVEL
 
             $table->string('company', 20)->nullable();
             $table->string('departure_station');
@@ -38,7 +38,7 @@ RESULT:
             $table->boolean('delay')->default(0);
             $table->boolean('canceled')->default(0);
 
-            $table->timestamps();
+            $table->timestamps(); //ALREADY PRESET BY LARAVEL
         });
     }
 
@@ -52,7 +52,7 @@ RESULT:
 
 ```
 
-EXECUTE THE MIGRATION
+## EXECUTE THE MIGRATION
 
 ```
 
@@ -60,7 +60,7 @@ php artisan migrate
 
 ```
 
-CHECK THE DATABASES
+## CHECK THE DATABASES
 
 ```
 
@@ -128,15 +128,7 @@ DESCRIBE trains;
 
 ```
 
-CREATE THE MODEL CLASS "Train"
-
-```
-
-php artisan make:model Train
-
-```
-
-CREATE THE SEEDER FOR THE "trains" TABLE IN THE DATABASE
+## CREATE THE SEEDER FOR THE "trains" TABLE IN THE DATABASE
 
 ```
 
@@ -152,7 +144,15 @@ Seeder [C:\MAMP\htdocs\Laravel\laravel-migration-seeder\database/seeders/TrainsT
 
 ```
 
-ADD THE MODEL Train AND THE Faker api INTO THE SEEDER
+## CREATE THE MODEL CLASS "Train"
+
+```
+
+php artisan make:model Train
+
+```
+
+## ADD THE MODEL Train AND THE Faker api INTO THE SEEDER
 
 ```php
 
@@ -194,7 +194,7 @@ class TrainsTableSeeder extends Seeder
 
 ```
 
-PLANT THE SEED
+## PLANT THE SEED
 
 ```
 
@@ -202,7 +202,7 @@ php artisan db:seed --class=TrainsTableSeder
 
 ```
 
-IS IT IS NEEDED  TO UPDATE THE TABLE:
+## IF IT IS NEEDED TO UPDATE THE TABLE:
 
 ```
 
@@ -210,7 +210,7 @@ php artisan make:migration update_trains_table_ --table=trains
 
 ```
 
-EDIT THE TABLE IN THE UP ABND DOWN FUNCTIONS IN THE update_trains_table.php MIGRATION FILE (REMOVES THE STRING LIMIT 50 FROM THE company COLUMN)
+EDIT THE TABLE IN THE UP AND DOWN FUNCTIONS IN THE update_trains_table.php MIGRATION FILE (REMOVES THE STRING LIMIT 50 FROM THE company COLUMN)
 
 ```php
 
@@ -222,7 +222,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('trains', function (Blueprint $table) {
-            // $table->string('company')->nullable()->change();
+            $table->string('company')->nullable()->change();
         });
     }
 
@@ -231,15 +231,16 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // REVERTS THE company COLUMN TO THE ORIGINAL VALUE
         Schema::table('trains', function (Blueprint $table) {
-            // $table->string('company', 50)-change();
+            $table->string('company', 50)-change();
         });
     }
 };
 
 ```
 
-ADD A PAGE CONTROLLER
+## ADD A PAGE CONTROLLER
 
 ```
 
@@ -247,19 +248,19 @@ php artisan make:controller Guests/PageController
 
 ```
 
-DEFINE THE ROUTE IN App\Http\Controllers\Guests\PageController.php
+## DEFINE THE ROUTE IN App\Http\Controllers\Guests\PageController.php
 
 ```php
 
     public function home()
     {
-        // RETURNS THE VIEW 'index' (index.blade.php)
+        // RETURNS THE VIEW 'home' (home.blade.php)
         return view('home');
     }
 
 ```
 
-EDIT THE 'index' METHOD AND GIVE THE MODEL Train AS A COLLECTION ARRAY
+## EDIT THE 'home' METHOD AND GIVE THE MODEL Train AS A COLLECTION ARRAY
 
 ADD
 
@@ -281,9 +282,9 @@ public function home()
 
 ```
 
-UPDATE THE ROUTE IN web.php
+## UPDATE THE ROUTE IN web.php
 
-ADD
+ADD THE PageController TO USE ITS METHODS
 
 ```php
 
@@ -297,5 +298,62 @@ GETS THE ROUTE FROM THE Controller PageController CLASS AND USES THE 'home' METH
 ```php
 
 Route::get('/', [PageController::class, 'home'])->name('home');
+
+```
+
+## EXTRA: ORDER THE TRAINS BY A VALUE USING sortBy()
+
+EDIT PageController (App\Http\Controllers\Guests\PageController.php):
+
+```php
+
+    public function home()
+    {
+        $trains = Train::all();
+
+        // SORTS A COLLECTION USING A CALLBACK VALUE
+        // https://laravel.com/docs/5.1/collections#method-sortby 
+        $sorted_trains = $trains->sortBy('departure_time')->values()->all();
+
+        //compact() CREATES AN ARRAY FROM THE $sorted_trains COLLECTION
+        return view('home', compact('sorted_trains'));
+    }
+
+```
+
+## EXTRA DROP ALL AND START AGAIN WITH AUTO SEEDING
+
+LINK THE SEEDER IN seeders/DatabaseSeeder.php
+
+```
+
+use App\Database\Seeders\TrainsTableSeeder;
+
+```
+
+ADD IN seeders/DatabaseSeeder run METHOD:
+
+```php
+
+    public function run(): void
+    {
+        $this->call([
+            TrainsTableSeeder::class,
+        ]);
+        // \App\Models\User::factory(10)->create();
+
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+    }
+
+```
+
+USE (https://laravel-news.com/migrate-fresh)
+
+```
+
+php artisan migrate:fresh --seed
 
 ```
