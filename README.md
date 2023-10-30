@@ -326,7 +326,7 @@ EDIT PageController (App\Http\Controllers\Guests\PageController.php):
 
 LINK THE SEEDER IN seeders/DatabaseSeeder.php
 
-```
+```php
 
 use App\Database\Seeders\TrainsTableSeeder;
 
