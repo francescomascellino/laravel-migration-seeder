@@ -365,12 +365,14 @@ ON THE PageController:
 
 ```php
 
-    public function houses()
-    {0ùà
-        $houses = House::orderByDesc('id')->paginate(12);
-        //dd($houses);
+    public function home()
+    {
+        $trains = Train::all();
 
-        return view('houses', compact('houses'));
+        $sorted_trains = Train::orderBy('departure_time', 'asc')->paginate(3);
+
+        //compact() CREATES AN ARRAY FROM THE $sorted_trains COLLECTION
+        return view('home', compact('sorted_trains'));
     }
 
 ```
@@ -379,7 +381,7 @@ ON THE VIEW MARKUP (houses.blade.php IN THIS EXAMPLE):
 ```php
 
     <div class="my-3">
-        {{$houses->links('pagination::bootstrap-5')}}
+        {{$sorted_trains->links('pagination::bootstrap-5')}}
     </div>
 
 ```

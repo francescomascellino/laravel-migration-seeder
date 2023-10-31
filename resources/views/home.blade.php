@@ -34,7 +34,9 @@
                     <h1>NO TRAINS TO SHOW</h1>
                 @endforelse
             </div>
-
+            <div class="my-3">
+                {{$sorted_trains->links('pagination::bootstrap-5')}}
+            </div>
         </div>
     </main>
 @endsection
